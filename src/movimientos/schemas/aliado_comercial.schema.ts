@@ -1,116 +1,132 @@
-import mongoose from 'mongoose';
-import { Schema } from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import * as mongoose from 'mongoose';
 
-export const Aliado_comercialSchema = new Schema({
+export type AliadoComercialDocument = Aliado_Comercial & Document;
 
-    _id: Schema.Types.ObjectId,
+@Schema()
+export class Aliado_Comercial {
 
-    actividad_economica: [Schema.Types.Mixed],
+    @Prop()
+    _id: mongoose.Schema.Types.ObjectId;
 
-    activo: Boolean,
+    @Prop()
+    actividad_economica: [mongoose.Schema.Types.Mixed];
 
-    cargo: String,
+    @Prop()
+    activo: boolean;
 
-    comision_publicidad: String,
+    @Prop()
+    cargo: string;
 
-    contactos: [Schema.Types.Mixed],
+    @Prop()
+    comision_publicidad: string;
 
-    correo_electronica: String,
+    @Prop()
+    contactos: [mongoose.Schema.Types.Mixed];
 
-    correo_representante: String,
+    @Prop()
+    correo_electronica: string;
 
-    cupo: String,
+    @Prop()
+    correo_representante: string;
+
+    @Prop()
+    cupo: string;
     
-    cupo_minimo: String,
+    @Prop()
+    cupo_minimo: string;
 
-    domicilio_fiscal: String,
+    @Prop()
+    domicilio_fiscal: string;
 
-    duracion: String,
+    @Prop()
+    duracion: string;
 
-    fecha_inicio: String,
+    @Prop()
+    fecha_inicio: string;
 
-    fee_publicidad: String,
+    @Prop()
+    fee_publicidad: string;
 
-    nombreAC: String,
+    @Prop()
+    nombreAC: string;
 
-    observaciones: String,
+    @Prop()
+    observaciones: string;
 
-    periodo_prueba: String,
+    @Prop()
+    periodo_prueba: string;
 
-    plus_recarga: Number,
+    @Prop()
+    plus_recarga: number;
 
-    ppvv: [Schema.Types.Mixed],
+    @Prop()
+    ppvv: [mongoose.Schema.Types.Mixed];
 
-    prepago: String,
-
-    representante_legal: String,
-
-    rif: String,
-
-    saldo: {
-        actual: Number,
-        base: Number,
-        maximo: Number,
-        minimo: Number,
-        nuevo: Number,
-        disponible: Number,
-        diferido: Number,
-        anticipo: Number,
-        real: Number,
-    },
-
-    saldo_actual: String,
-
-    telefonos: String,
-
-    telf_representante: String,
-
-    punto_comercial: [Schema.Types.Mixed],
-
-    punto_venta: [Schema.Types.Mixed],
-
-    telefono: String,
-
-    esDristribuidor: Boolean,
-
-    razon_social: String,
+    @Prop()
+    prepago: string;
     
-    direccion: String,
+    @Prop()
+    representante_legal: string;
 
-    vendedor: [Schema.Types.Mixed],
+    @Prop()
+    rif: string;
 
-    usuarios: [Schema.Types.Mixed],
+    @Prop()
+    saldo: [mongoose.Schema.Types.Mixed]
 
-    email: String,
+    @Prop()
+    saldo_actual: string;
 
-    ultima_recarga: {
-        codigo_repuesta: String,
-        codigo_aprobacion: String,
-        numeroServicio_mvto: String,
-        monto: Number,
-        monto_neto: Number,
-        status: String,
-        fecha_mvto: Date,
-    },
+    @Prop()
+    telefonos: string;
 
-    asignar_maquina: Boolean,
+    @Prop()
+    telf_representante: string;
 
-    credito: {
-        activo: Boolean,
-        monto: Number,
-        tiempo: Number,
-        contadorSobregiros: Number,
-        sobregirado: Boolean,
-        fecha: Date,
-    },
+    @Prop()
+    punto_comercial: [mongoose.Schema.Types.Mixed];
 
-    privilegios:[Schema.Types.Mixed],
+    @Prop()
+    punto_venta: [mongoose.Schema.Types.Mixed];
 
-    compras_conciliadas: Number
+    @Prop()
+    telefono: string;
 
-    },
-    { collection : 'aliado_comercial'}
-);
+    @Prop()
+    esDristribuidor: boolean;
 
-const Aliado_Comercial = mongoose.model('Aliado_Comercial', Aliado_comercialSchema);
+    @Prop()
+    razon_social: string;
+    
+    @Prop()
+    direccion: string;
+
+    @Prop()
+    vendedor: [mongoose.Schema.Types.Mixed];
+
+    @Prop()
+    usuarios: [mongoose.Schema.Types.Mixed];
+
+    @Prop()
+    email: string;
+
+    @Prop()
+    ultima_recarga:[mongoose.Schema.Types.Mixed]
+
+    @Prop()
+    asignar_maquina: boolean;
+
+    @Prop()
+    credito: [mongoose.Schema.Types.Mixed]
+
+    @Prop()
+    privilegios:[mongoose.Schema.Types.Mixed];
+
+    @Prop()
+    compras_conciliadas: number;
+
+};
+
+export const Aliado_ComercialSchema = SchemaFactory.createForClass(Aliado_Comercial);
 //module.exports = Aliado_Comercial;

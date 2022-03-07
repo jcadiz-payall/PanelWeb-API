@@ -1,55 +1,74 @@
-import mongoose from 'mongoose';
-import { Schema } from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import * as mongoose from 'mongoose';
+import { Aliado_Comercial } from './aliado_comercial.schema';
 
-export const MovimientosSchema = new Schema({
+export type MovimientosDocument = Movimientos & Document;
 
-    _id: Schema.Types.ObjectId,
+@Schema()
+export class Movimientos {
 
-    numero_mvto: String,
+    @Prop()
+    _id: mongoose.Schema.Types.ObjectId;
 
-    tipo_mvto: String,
+    @Prop()
+    numero_mvto: string;
 
-    monto_mvto: Number,
+    @Prop()
+    tipo_mvto: string;
 
-    status_mvto: String,
+    @Prop()
+    monto_mvto: number;
 
-    voucher_mvto: String,
+    @Prop()
+    status_mvto: string;
 
-    disponible_mvto: Number,
+    @Prop()
+    voucher_mvto: string;
 
-    fechaRegistro_mvto: Date,
+    @Prop()
+    disponible_mvto: number;
 
-    fechaOperacion_mvto: Date,
+    @Prop()
+    fechaRegistro_mvto: Date;
 
-    update: [Schema.Types.Mixed],
+    @Prop()
+    fechaOperacion_mvto: Date;
 
-    aliadoComercial_mvto: [{ type: Schema.Types.ObjectId, ref: 'aliado_comercial' }],
+    @Prop()
+    update: [mongoose.Schema.Types.Mixed];
 
-    cuenta_mvto: [Schema.Types.Mixed],
+    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId , ref: 'Aliado_Comercial' }] })
+    aliadoComercial_mvto: Aliado_Comercial[];
+    //aliadoComercial_mvto: [mongoose.Schema.Types.Mixed];
 
-    banco_mvto: [Schema.Types.Mixed],
+    @Prop()
+    cuenta_mvto: [mongoose.Schema.Types.Mixed];
 
-    usuario: [Schema.Types.Mixed],
+    @Prop()
+    banco_mvto: [mongoose.Schema.Types.Mixed];
 
-    banco_movimiento: Number,
+    @Prop()
+    usuario: [mongoose.Schema.Types.Mixed];
 
-    c2p: { 
-        nacionalidad: String, 
-        banco: String 
-    },
+    @Prop()
+    banco_movimiento: number;
 
-    fechaConciliacion_mvto: Date,
+    @Prop()
+    c2p: [mongoose.Schema.Types.Mixed];
 
-    }, 
+    @Prop()
+    fechaConciliacion_mvto: Date;
 
-    { collection : 'movimientos' }
-);
+};
+
+    //{ collection : 'movimientos' }
+
 
 //export const MovimientosSchema = SchemaFactory.createForClass(Movimientos);
 //export const Aliado_comercialSchema = SchemaFactory.createForClass(Aliado_Comercial);
 
 
-const Movimientos = mongoose.model('Movimiento', MovimientosSchema);
+export const MovimientosSchema = SchemaFactory.createForClass(Movimientos);
 //module.exports = Movimientos;
 
 // const Aliado_Comercial = mongoose.model('Aliado_Comercial', Aliado_comercialSchema);

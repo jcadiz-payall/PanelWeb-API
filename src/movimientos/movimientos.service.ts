@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ListadoCompras } from './interfaces/listadoCompras.interface';
 import { Movimientos } from './interfaces/movimientos.interface';
+import { Aliado_ComercialSchema } from './schemas/aliado_comercial.schema';
 
 @Injectable()
 export class MovimientosService {
@@ -20,19 +21,87 @@ export class MovimientosService {
     }
 
     async listadoCompras():Promise<any[]>{
-        const listado = await this.movimientosModel.find({
-            tipo_mvto: "compra"
-        })//.select({
+        // const listado = await this.movimientosModel.find({
+        //     tipo_mvto: "compra",
+        //     _id: "61c479e32b1d6d0d538b456f"
+        // }).select({
         //     fechaRegistro_mvto: 1,
         //     banco_mvto: 1,
         //     voucher_mvto: 1,
         //     monto_mvto: 1,
         //     aliadoComercial_mvto: 1
         // })
-        // .populate({ path: 'aliadoComercial_mvto', select: ['nombreAC'] })
-        .limit(2);
+        // .populate({ path: 'aliadoComercial_mvto', select:'nombreAC'}).exec();
 
-        //console.log(listado);
+        const listado = await this.movimientosModel.aggregate([
+            // {
+            //     $limit: 10
+            // }, {
+                {
+                $project: {
+                    tipo_mvto: 1,
+                    fechaRegistro_mvto: 1,
+                    status_mvto: 1,
+                    monto_mvto: 1,
+                    voucher_mvto: 1,
+                    aliadoComercial_mvto: {
+                        $arrayElemAt: [{
+                            $objectToArray: "$aliadoComercial_mvto"
+                        }, -1]
+                    },
+                    banco_mvto: {
+                        $arrayElemAt: [{
+                            $objectToArray: "$banco_mvto"
+                        }, -1]
+                    }
+                }
+                }, {
+                    $lookup: {
+                        from: 'aliado_comercial',
+                        localField: 'aliadoComercial_mvto.v',
+                        foreignField: '_id',
+                        as: 'aliadoInfo'
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'bancos',
+                        localField: 'banco_mvto.v',
+                        foreignField: '_id',
+                        as: 'bancoInfo'
+                    }
+                },
+                
+            {
+                $unwind: {
+                    path: "$aliadoInfo"
+                }
+            }, 
+            {
+                $unwind: {
+                    path: "$bancoInfo"
+                }
+            }, 
+            {
+                $project: {
+                    tipo_mvto: 1,
+                    fechaRegistro_mvto: 1,
+                    status_mvto: 1,
+                    monto_mvto: 1,
+                    voucher_mvto: 1,
+                    nombreAliado: "$aliadoInfo.nombreAC",
+                    nombreBanco: "$bancoInfo.nombre"
+                }
+            },
+            {
+                $match:{
+                    status_mvto: 'C',
+                    tipo_mvto: "compra"
+                }
+            }
+        ]).limit(5);
+    
+        
         return listado;
     }
 }
